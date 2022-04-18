@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import App from './containers/App';
 import './index.css';
+import { logActions } from './middleware';
 import pokeReducer from './reducers/pokeReducer';
 
-const store = createStore(pokeReducer);
+const composedEnhacers = compose(applyMiddleware(logActions));
+
+const store = createStore(pokeReducer,composedEnhacers);
 
 ReactDOM.render(
     <Provider store={store}>
