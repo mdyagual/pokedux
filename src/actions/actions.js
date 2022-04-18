@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getPokemons } from '../api/getPokemons';
+import { getPokemons, getPokemonsDetailed } from '../api/getPokemons';
 import * as actions from '../utils/actionTypes';
 
 export const setPokemonAction = (pokemons) => {
@@ -9,13 +9,30 @@ export const setPokemonAction = (pokemons) => {
     };
 };
 
-export const getPokemonDetailedAction = () => (dispatch) => {
-   getPokemons().then(res=>{
-       const pokeList = res.results;
-       return Promise.all(pokeList.map(p=>axios.get(p.url)))
-   })
-   .then(pokeResponse => {
-       const pokeInfo = pokeResponse.map(response => response.data);
-       dispatch(setPokemonAction(pokeInfo));
-   });
+export const getPokemonDetailedAction = () => async (dispatch) => {
+    try{
+        const response = await getPokemons();
+        const pokemons = response.results;
+        const pokemonsDetailed = await getPokemonsDetailed(pokemons);
+        //console.log("PokeDetailed: ",pokemonsDetailed)
+        dispatch(setPokemonAction(pokemonsDetailed));
+        dispatch(setLoaderAction());
+    }catch (error){
+        console.log(error);
+        dispatch(setLoaderAction());
+    }
+    
+};
+
+export const setLoaderAction = () => {
+    return {
+        type: actions.SET_LOADER
+    };
+};
+
+export const setFavoriteAction = (id) => {
+    return {
+        type: actions.SET_FAVORITE,
+        payload: id
+    };
 };
