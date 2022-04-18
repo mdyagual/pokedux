@@ -5,7 +5,13 @@
     box-shadow: 0.2em 0.4em 0.4em -0.2em #999;
   }
   
-  .PokemonCard-title {
+  .PokeCard-title {
     text-align: center;
     color: #999;
+  }
+
+  .PokeCard-favorite {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
